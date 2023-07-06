@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 String isian_nim = edNim.getText().toString();
                 String isian_noHp = edNoHp.getText().toString();
 
+
                 if (isian_nama.isEmpty() || isian_nim.isEmpty() || isian_noHp.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Isian masih kosong", Toast.LENGTH_SHORT).show();
                 } else {
@@ -90,23 +91,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnLihat = (Button) findViewById(R.id.btnLihat);
+
+
+        Button btnLihat = findViewById(R.id.btnLihat);
         btnLihat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mhsList = db.list();
 
                 if (mhsList.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Belum ada data", Toast.LENGTH_SHORT).show();
-                }else{
-                    Intent intent_list = new Intent(MainActivity.this, ListMhsActivity.class);
-                    intent_list.putParcelableArrayListExtra("mhsList", mhsList);
-                    startActivity(intent_list);
+                } else {
+                    StringBuilder sb = new StringBuilder();
+
+                    for (int i = 0; i < mhsList.size(); i++) {
+                        if (i % 2 == 0) {
+                            MhsModel mhs = mhsList.get(i);
+                            sb.append((i + 1) + ". Nama: " + mhs.getNama() + ", NIM: " + mhs.getNim() + ", No HP: " + mhs.getNoHp() + "\n");
+                        }
+                    }
+
+                    String hasilList = sb.toString();
+
+                    if (hasilList.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Tidak ada data yang ditampilkan", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent_list = new Intent(MainActivity.this, ListMhsActivity.class);
+                        intent_list.putParcelableArrayListExtra("mhsList", mhsList);
+                        startActivity(intent_list);
+                        Toast.makeText(getApplicationContext(), hasilList, Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-
             }
         });
+
+
+
     }
 }
